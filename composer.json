@@ -1,0 +1,28 @@
+{
+    "name": "package/interviewbackend",
+    "description": "",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rakib",
+            "email": "rakib@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Interview\\Backend\\": "src/"
+        }
+    },
+    "extra": {
+        "copyright": "pondit",
+        "laravel": {
+            "providers": [
+                "Interview\\Backend\\InterviewBackendServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "minimum-stability": "dev"
+}
