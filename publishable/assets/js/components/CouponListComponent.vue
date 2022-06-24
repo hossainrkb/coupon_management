@@ -30,9 +30,9 @@
                                         <div class="btn-group" role="group">
                                             <router-link :to="{ name: 'coupons-show', params: { id: coupon.id } }"
                                                 class="btn btn-success">Show</router-link>
-                                            <button class="btn btn-danger" @click="deletecoupon(coupon.id)">
-                                                Delete
-                                            </button>
+                                            <router-link :to="{ name: 'coupons-edit', params: { id: coupon.id } }"
+                                                class="btn btn-info">Edit</router-link>
+                                       
                                         </div>
                                     </td>
                                 </tr>

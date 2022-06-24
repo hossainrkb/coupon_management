@@ -26,26 +26,25 @@ class CourseCollection extends ResourceCollection
                 $cut_off = "";
                 if (count($data->appliedcoupons)) {
                     $cut_off = "";
-                    foreach ($data->appliedcoupons as $key => $value) {
-                        $coupon = Coupon::find($value->coupon_id);
-                        if ($coupon->type == "FIXED AMOUNT" &&  $coupon->expire_on > Carbon::now()) {
-                            $has_discount = true;
-                            $coupon_amount = $coupon->amount;
-                            $after_discount = $after_discount - $coupon_amount;
-                            $cut_off.= number_format($coupon_amount,2)." ";
-                        } elseif ($coupon->type == "PERCENTAGE" &&  $coupon->expire_on > Carbon::now()) {
-                            $has_discount = true;
-                            $coupon_amount = $coupon->amount;
-                            $after_discount = $after_discount - ($after_discount * ($coupon_amount / 100));
-                            $cut_off.= number_format($coupon_amount,2)."% ";
-                        }
+                    $value = $data->appliedcoupons()->first();
+                    $coupon = Coupon::find($value->coupon_id);
+                    if ($coupon->type == "FIXED AMOUNT" &&  $coupon->expire_on > Carbon::now()) {
+                        $has_discount = true;
+                        $coupon_amount = $coupon->amount;
+                        $after_discount = $after_discount - $coupon_amount;
+                        $cut_off = number_format($coupon_amount, 2) . " ";
+                    } elseif ($coupon->type == "PERCENTAGE" &&  $coupon->expire_on > Carbon::now()) {
+                        $has_discount = true;
+                        $coupon_amount = $coupon->amount;
+                        $after_discount = $after_discount - ($after_discount * ($coupon_amount / 100));
+                        $cut_off = number_format($coupon_amount, 2) . "% ";
                     }
                 }
                 return [
                     'id'             => $data->id,
                     'name'           => $data->name,
-                    'regular_price'  => number_format((float)$regular_price,2),
-                    'after_discount' =>  number_format((float)$after_discount,2),
+                    'regular_price'  => number_format((float) $regular_price, 2),
+                    'after_discount' =>  number_format((float) $after_discount, 2),
                     'has_discount'   =>  $has_discount,
                     'img'            => $data->course_image_url,
                     'cut_off'        => $cut_off,

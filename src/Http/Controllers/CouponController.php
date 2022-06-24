@@ -5,6 +5,7 @@ namespace Interview\Backend\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Interview\Backend\Models\AppliedableCoupon;
 use Interview\Backend\Models\Coupon;
 use Interview\Backend\Models\Course;
 use Interview\Backend\Models\Category;
@@ -104,8 +105,8 @@ class CouponController extends Controller
             'coupon_number' => $coupon->coupon_number,
             'applied_on_course_count' => count($applied_on_course),
             'applied_on_course' => $applied_on_course,
-            'categories' => Category::all(),
-            'courses' => Course::all(),
+            'categories' => Category::whereNotIn('id',AppliedableCoupon::where('appliedable_type', Category::$class_name)->pluck('appliedable_id')->toArray())->get(),
+            'courses' => Course::whereNotIn('id',AppliedableCoupon::where('appliedable_type', Course::$class_name)->pluck('appliedable_id')->toArray())->get(),
         ];
         return response()->json([
             'status' => 'ok',
@@ -120,7 +121,12 @@ class CouponController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Coupon $coupon)
-    { }
+    {
+        return response()->json([
+            'status' => 'ok',
+            'data' => $coupon
+        ]);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -129,9 +135,17 @@ class CouponController extends Controller
      * @param  \App\Models\Coupon  $coupon
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCouponRequest $request, Coupon $coupon)
+    public function update(Request $request, Coupon $coupon)
     {
-        //
+        $coupon->update([
+            'type'   => $request->type,
+            'amount' => $request->amount,
+            'expire_on' => $request->expire_on
+        ]);
+        return response()->json([
+            'status' => 'ok',
+            'data' => $coupon
+        ]);
     }
 
     /**

@@ -29,11 +29,11 @@ class CategoryCollection extends ResourceCollection
                         if ($coupon->type == "FIXED AMOUNT" &&  $coupon->expire_on > Carbon::now()) {
                             $has_discount = true;
                             $coupon_amount = $coupon->amount;
-                            $cut_off.= number_format($coupon_amount,2)." ";
+                            $cut_off = number_format($coupon_amount,2)." ";
                         } elseif ($coupon->type == "PERCENTAGE" &&  $coupon->expire_on > Carbon::now()) {
                             $has_discount = true;
                             $coupon_amount = $coupon->amount;
-                            $cut_off.= number_format($coupon_amount,2)."% ";
+                            $cut_off = number_format($coupon_amount,2)."% ";
                         }
                     }
                 }
