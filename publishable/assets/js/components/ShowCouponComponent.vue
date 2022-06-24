@@ -108,7 +108,7 @@ export default {
 
             this.axios
                 .post(
-                    `${process.env.MIX_API_END_POINT}/api/detach-coupon/${id}`,
+                    `/api/detach-coupon/${id}`,
                     {
                     },
                     {
@@ -135,7 +135,7 @@ export default {
 
             this.axios
                 .post(
-                    `${process.env.MIX_API_END_POINT}/api/applied-coupon/course/${this.new_course}`,
+                    `/api/applied-coupon/course/${this.new_course}`,
                     {
                         coupon_id: this.$route.params.id,
                     },
@@ -163,7 +163,7 @@ export default {
 
             this.axios
                 .post(
-                    `${process.env.MIX_API_END_POINT}/api/applied-coupon/category/${this.new_category}`,
+                    `/api/applied-coupon/category/${this.new_category}`,
                     {
                         coupon_id: this.$route.params.id,
                     },
@@ -191,7 +191,7 @@ export default {
 
             this.axios
                 .post(
-                    `${process.env.MIX_API_END_POINT}/api/coupons/show/${this.$route.params.id}`,
+                    `/api/coupons/show/${this.$route.params.id}`,
                     {},
                     {
                         headers: headers,

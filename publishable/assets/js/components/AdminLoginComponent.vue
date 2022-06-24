@@ -48,7 +48,7 @@
                     'grant_type':'password'
                 }
                 this.axios
-                    .post(`${process.env.MIX_API_END_POINT}/oauth/token`, data)
+                    .post(`/oauth/token`, data)
                     .then(response => {
                             let {data:{access_token}} = response;
                             if(access_token){

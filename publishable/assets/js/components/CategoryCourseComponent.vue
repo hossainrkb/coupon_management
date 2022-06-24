@@ -43,7 +43,7 @@ export default {
     created() {
         this.axios
             .post(
-                `${process.env.MIX_API_END_POINT}/api/category/show/${this.$route.params.id}`,
+                `/api/category/show/${this.$route.params.id}`,
             )
             .then((response) => {
                 let { data } = response;

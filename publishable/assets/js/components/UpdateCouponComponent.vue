@@ -60,7 +60,7 @@ export default {
 
             this.axios
                 .post(
-                    `${process.env.MIX_API_END_POINT}/api/coupons/${this.$route.params.id}/edit`,
+                    `/api/coupons/${this.$route.params.id}/edit`,
                     {},
                     {
                         headers: headers,
@@ -94,7 +94,7 @@ export default {
             };
             this.axios
                 .put(
-                    `${process.env.MIX_API_END_POINT}/api/coupons/${this.$route.params.id}/update`,
+                    `/api/coupons/${this.$route.params.id}/update`,
                     data,
                     { headers }
                 )

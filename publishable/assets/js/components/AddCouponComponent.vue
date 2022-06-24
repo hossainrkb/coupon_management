@@ -77,7 +77,7 @@ export default {
             };
             this.axios
                 .post(
-                    `${process.env.MIX_API_END_POINT}/api/coupons/store`,
+                    `/api/coupons/store`,
                     data,
                     { headers }
                 )

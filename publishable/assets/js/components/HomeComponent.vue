@@ -66,7 +66,7 @@ export default {
     created() {
         this.axios
             .post(
-                `${process.env.MIX_API_END_POINT}/api/courses`,
+                `/api/courses`,
             )
             .then((response) => {
                 let { data } = response;
@@ -76,7 +76,7 @@ export default {
             });
         this.axios
             .post(
-                `${process.env.MIX_API_END_POINT}/api/category`,
+                `/api/category`,
             )
             .then((response) => {
                 let { data } = response;

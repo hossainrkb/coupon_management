@@ -21,7 +21,7 @@ const router = new VueRouter({
     routes: routes,
 });
 router.beforeEach((to, from, next) => {
-    if (localStorage.getItem("project_access_token") || to.name == "home") {
+    if (localStorage.getItem("project_access_token") || to.name == "home" ||to.name == "category-course-show") {
         if (to.name != "admin-login") {
             next();
         } else {
