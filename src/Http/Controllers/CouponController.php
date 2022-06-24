@@ -18,26 +18,12 @@ class CouponController extends Controller
         $return_able_array = [];
         if (count($coupons)) {
             foreach ($coupons as $key => $value) {
-                $applied_on_cat = [];
-                $applied_on_course = [];
-                $applied_cats =  $value->applied()->where('appliedable_type',Category::$class_name)->get();
-                $applied_courses =  $value->applied()->where('appliedable_type',Course::$class_name)->get();
-                if(count($applied_cats)){
-                    foreach ($applied_cats as $applied_cat) {
-                        $applied_on_cat[] = $applied_cat->appliedable;
-                    }
-                }
-                if(count($applied_courses)){
-                    foreach ($applied_courses as $applied_ourse) {
-                        $applied_on_course[] = $applied_ourse->appliedable;
-                    }
-                }
-                $return_able_array[$value->id] = [
+
+                $return_able_array[] = [
+                    'id' => $value->id,
                     'type' => $value->type ?? null,
                     'amount' => $value->amount ?? null,
                     'is_expired' => $value->expire_on > Carbon::now() ? 'NO' : 'YES',
-                    'applied_on_cat' => $applied_on_cat,
-                    'applied_on_course' => $applied_on_course,
                 ];
             }
         }
@@ -82,9 +68,40 @@ class CouponController extends Controller
      * @param  \App\Models\Coupon  $coupon
      * @return \Illuminate\Http\Response
      */
-    public function show(Coupon $coupon)
+    public function show( $coupon)
     {
-        //
+        $coupon = Coupon::find($coupon);
+        $return_able_array = [];
+        $applied_on_cat = [];
+        $applied_on_course = [];
+        $applied_cats =  $coupon->applied()->where('appliedable_type', Category::$class_name)->get();
+        $applied_courses =  $coupon->applied()->where('appliedable_type', Course::$class_name)->get();
+        if (count($applied_cats)) {
+            foreach ($applied_cats as $applied_cat) {
+                $applied_on_cat[] = $applied_cat->appliedable;
+            }
+        }
+        if (count($applied_courses)) {
+            foreach ($applied_courses as $applied_ourse) {
+                $applied_on_course[] = $applied_ourse->appliedable;
+            }
+        }
+        $return_able_array = [
+            'id' => $coupon->id,
+            'type' => $coupon->type ?? null,
+            'amount' => $coupon->amount ?? null,
+            'is_expired' => $coupon->expire_on > Carbon::now() ? 'NO' : 'YES',
+            'applied_on_cat_count' => count($applied_on_cat),
+            'applied_on_cat' => $applied_on_cat,
+            'applied_on_course_count' => count($applied_on_course),
+            'applied_on_course' => $applied_on_course,
+            'categories' => Category::all(),
+            'courses' => Course::all(),
+        ];
+        return response()->json([
+            'status' => 'ok',
+            'data' => $return_able_array
+        ]);
     }
 
     /**
@@ -94,9 +111,7 @@ class CouponController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Coupon $coupon)
-    {
-        //
-    }
+    { }
 
     /**
      * Update the specified resource in storage.
