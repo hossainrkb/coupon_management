@@ -18,11 +18,11 @@ class CouponController extends Controller
         $return_able_array = [];
         if (count($coupons)) {
             foreach ($coupons as $key => $value) {
-
                 $return_able_array[] = [
                     'id' => $value->id,
                     'type' => $value->type ?? null,
                     'amount' => $value->amount ?? null,
+                    'expire_on' => Carbon::parse($value->expire_on)->format("d-M-Y"),
                     'is_expired' => $value->expire_on > Carbon::now() ? 'NO' : 'YES',
                 ];
             }
@@ -54,6 +54,7 @@ class CouponController extends Controller
         $coupon = Coupon::create([
             'type'   => $request->type,
             'amount' => $request->amount,
+            'coupon_number' => $this->getRandomNumber(8),
             'expire_on' => $request->expire_on
         ]);
         return response()->json([
@@ -68,7 +69,7 @@ class CouponController extends Controller
      * @param  \App\Models\Coupon  $coupon
      * @return \Illuminate\Http\Response
      */
-    public function show( $coupon)
+    public function show($coupon)
     {
         $coupon = Coupon::find($coupon);
         $return_able_array = [];
@@ -78,12 +79,18 @@ class CouponController extends Controller
         $applied_courses =  $coupon->applied()->where('appliedable_type', Course::$class_name)->get();
         if (count($applied_cats)) {
             foreach ($applied_cats as $applied_cat) {
-                $applied_on_cat[] = $applied_cat->appliedable;
+                $applied_on_cat[] = [
+                    'applied_func'=>$applied_cat,
+                    'appliedable'=>$applied_cat->appliedable,
+                ];
             }
         }
         if (count($applied_courses)) {
             foreach ($applied_courses as $applied_ourse) {
-                $applied_on_course[] = $applied_ourse->appliedable;
+                $applied_on_course[] = [
+                    'applied_func'=>$applied_ourse,
+                    'appliedable'=>$applied_ourse->appliedable,
+                ];
             }
         }
         $return_able_array = [
@@ -93,6 +100,8 @@ class CouponController extends Controller
             'is_expired' => $coupon->expire_on > Carbon::now() ? 'NO' : 'YES',
             'applied_on_cat_count' => count($applied_on_cat),
             'applied_on_cat' => $applied_on_cat,
+            'expire_on' => Carbon::parse($coupon->expire_on)->format("d-M-Y"),
+            'coupon_number' => $coupon->coupon_number,
             'applied_on_course_count' => count($applied_on_course),
             'applied_on_course' => $applied_on_course,
             'categories' => Category::all(),
@@ -134,5 +143,19 @@ class CouponController extends Controller
     public function destroy(Coupon $coupon)
     {
         //
+    }
+
+    public  function getRandomNumber($length = 12, $numeric = false)
+    {
+        $characters = 'ABCDEFGHJKMNOPQRSTUVWXYZ123456789';
+        if ($numeric) {
+            $characters = '12345678910111213';
+        }
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

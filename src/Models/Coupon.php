@@ -11,6 +11,7 @@ class Coupon extends Model
 
     protected $fillable = [
         'type',
+        'coupon_number',
         'amount',
         'expire_on'
     ];
